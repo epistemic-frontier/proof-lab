@@ -11,6 +11,7 @@ difficult a theorem appears.
 | Task 3 | **Discover** | Research question | Certified theorem, counterexample, restricted result, bounded frontier, or audited inconclusion | Quarantined research |
 | Task 4 | **Formalize** | Five-hat puzzle and intended answer | Verified propositional core with an explicit epistemic boundary | Admitted |
 | Task 5 | **Formalize** | Three finite epistemic puzzles | Executable S5/public-announcement traces | Computationally certified; quarantined |
+| Task 6 | **Formalize** | Chaum's three-diner protocol | Formal finite tables plus executable epistemic and attack evidence | Mixed evidence; table proofs admitted |
 
 The progression is an uncertainty chain:
 
@@ -46,6 +47,7 @@ tasks/                          durable task records and research evidence
   task_03_finite_models/        research-to-proof pipeline
   task_04_hats/                 small puzzle-to-formalization pipeline
   task_05_epistemic_puzzles/    finite public-announcement evidence
+  task_06_dining_cryptographers/ finite security-protocol evidence
 src/proof_lab/
   epistemic/                    finite S5/public-announcement semantics
   registry.py                   task catalogue and explicit admission plan
@@ -54,6 +56,7 @@ src/proof_lab/
   tasks/task_01_textbook/       installed Task 1 implementation
   tasks/task_04_hats/           installed Task 4 implementation
   tasks/task_05_epistemic_puzzles/ executable Task 5 semantic models
+  tasks/task_06_dining_cryptographers/ executable Task 6 protocol model
 artifacts/                      generated-evidence namespaces
 schemas/                        minimal v1 evidence contracts
 ```
@@ -105,6 +108,16 @@ outside `PACKAGE_TASK_IDS`. The implementation is written as an executable essay
 sources and puzzle provenance collected in
 [`tasks/task_05_epistemic_puzzles/REFERENCES.md`](tasks/task_05_epistemic_puzzles/REFERENCES.md).
 
+### Task 6 — Formalize
+
+Task 6 applies the same finite semantics to Chaum's Dining Cryptographers protocol. Metamath now
+proves its complete 32-row parity table (`dc_parity_table`) and a 24-row transcript-preserving payer
+bijection table (`dc_payer_bijection_table`). The S5 model separately checks outsider and honest
+non-payer knowledge, exact distribution counts, and a disconnected-topology attack. This is a
+mixed boundary: the two named tables are formal theorems; modal knowledge remains computational.
+See
+[`tasks/task_06_dining_cryptographers/README.md`](tasks/task_06_dining_cryptographers/README.md).
+
 ## Toolchain
 
 - Proof Lab: `0.0.1`
@@ -136,7 +149,16 @@ uv run --frozen proof-lab-tasks show task_02
 Run the finite epistemic evidence suite:
 
 ```bash
-uv run --frozen python -m pytest tests/test_finite_epistemic.py tests/test_epistemic_puzzles.py
+uv run --frozen python -m pytest \
+  tests/test_finite_epistemic.py \
+  tests/test_epistemic_puzzles.py \
+  tests/test_dining_cryptographers.py
+```
+
+Render the Dining Cryptographers audit report:
+
+```bash
+uv run --frozen python -m proof_lab.tasks.task_06_dining_cryptographers
 ```
 
 Run the admitted proof scripts independently:
@@ -156,7 +178,8 @@ uv run --frozen skfd verify proof-lab --level 1 --coverage declared
 
 The desired future interface is `skfd verify proof-lab:task_01` and
 `skfd verify proof-lab:all`. ProofScaffold 0.0.9 does not yet support namespaced task targets, so
-the package build currently executes the explicit admission tuple, which contains Tasks 1 and 4.
+the package build currently executes the explicit admission tuple, which contains Tasks 1, 4,
+and 6. Task 6 admission covers its two finite propositional tables, not its Python modal evaluator.
 
 ## Development rule
 

@@ -107,12 +107,35 @@ _TASKS = {
         manifest_path="tasks/task_05_epistemic_puzzles/task.yaml",
         artifact_namespace="artifacts/task_05",
     ),
+    "task_06": TaskSpec(
+        task_id="task_06",
+        slug="dining-cryptographers",
+        title="Dining Cryptographers Security Demo",
+        kind="formalize",
+        status="active",
+        manifest_path="tasks/task_06_dining_cryptographers/task.yaml",
+        artifact_namespace="artifacts/task_06",
+        builder="proof_lab.tasks._propositional_builder:build_tasks",
+        implementation_module="proof_lab.tasks.task_06_dining_cryptographers.proofs",
+        proofs=(
+            ProofEntry(
+                function="prove_dc_parity_table",
+                theorem="dc_parity_table",
+                role="exhaustive-protocol-correctness-table",
+            ),
+            ProofEntry(
+                function="prove_dc_payer_bijection_table",
+                theorem="dc_payer_bijection_table",
+                role="exhaustive-transcript-bijection-table",
+            ),
+        ),
+    ),
 }
 
 TASKS: Mapping[str, TaskSpec] = MappingProxyType(_TASKS)
 
 # This is an explicit release admission plan. Do not derive it from task status.
-PACKAGE_TASK_IDS: tuple[str, ...] = ("task_01", "task_04")
+PACKAGE_TASK_IDS: tuple[str, ...] = ("task_01", "task_04", "task_06")
 
 
 def get_task(task_id: str) -> TaskSpec:
